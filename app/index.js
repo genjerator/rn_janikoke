@@ -3,13 +3,13 @@ import React, {useEffect, useState} from 'react';
 import * as Location from 'expo-location';
 import moment from 'moment';
 import WorldMap from '../component/WorldMap'
-import {distanceFromCenterPolygon, polygonsCoordinates} from "../component/Polygons";
+import {distanceFromCenterPolygon, polygoneer, polygonsCoordinates} from "../component/Polygons";
 
 const Home = () => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [currentTimestamp, setCurrentTimestamp] = useState(moment.now());
-    const [locationHistory, setLocationHistory] = useState([]);
+
     useEffect(() => {
         const getLocation = async () => {
             try {
@@ -21,7 +21,7 @@ const Home = () => {
 
                 let currentLocation = await Location.getCurrentPositionAsync({});
                 setLocation(currentLocation);
-                //Vibration.vibrate(500,true);
+
 
             } catch (error) {
                 console.error('Error getting location:', error);
@@ -55,11 +55,10 @@ const Home = () => {
                 <Text>{text}</Text>
             </View>
             <View style={{flex: 1}}>
-                <WorldMap location={location} polygons={polygonsCoordinates} />
+                <WorldMap location={location} polygons={polygoneer(location)??[]} />
             </View>
         </>
-    )
-        ;
+    );
 };
 
 export default Home;

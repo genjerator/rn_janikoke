@@ -1,58 +1,64 @@
-// WorldMap.js
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {StyleSheet, Text} from 'react-native';
 import MapView, {Marker, Polygon} from 'react-native-maps';
 import Constants from 'expo-constants';
-import * as geolib from 'geolib';
-import * as testPolygons from './Polygons';
-import {polygonCoordinates, polygonsCoordinates,distanceFromCenterPolygon} from "./Polygons";
+import * as geolib from "geolib";
+
 const WorldMap = ({ location, polygons }) => {
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
+    const [inside, setInside] = useState(false);
+    const [polygonsArea, setPolygonsArea] = useState([]);
+    useEffect(() => {
+        // Update state when the location prop changes
+        if (location?.coords) {
+            setLat(location.coords.latitude);
+            setLng(location.coords.longitude);
+            const test = geolib.isPointInPolygon({latitude: location.coords.latitude, longitude: location.coords.longitude}, polygonsArea[0]);
+            setInside(test);
 
+        }
+        if(polygons)
+        {
+            setPolygonsArea(polygons)
+        }
 
-    const lat = location && location.location && location.location.coords && location.location.coords.latitude;
-    const lng = location && location.location && location.location.coords && location.location.coords.longitude;
-    //load test polygons
+    }, [polygons,location]);
 
-    const testPolygon = polygonCoordinates;
-    const testPolygons = polygonsCoordinates;
-
-
-
-    //console.log("polygons",polygons.polygons);
     return (
         <MapView
             style={styles.map}
-            initialRegion={{
-                longitude: 19.8388839,
-                latitude: 45.2378003,
+            region={{
+                longitude:  lng ?? 19.8388839,
+                latitude:  lat ?? 45.2378003,
                 latitudeDelta: 0.005,
                 longitudeDelta: 0.005,
             }}
         >
-            {lng && lat && (
+
                 <>
-                    <Text>Init...</Text>
                     <Marker
                         coordinate={{
-                            latitude: lat,
-                            longitude: lng,
+                            latitude: lat ?? 45.2378003,
+                            longitude: lng ?? 19.8388839,
                         }}
                         title="Polygon Center"
                     />
                 </>
-            )}
 
-            {polygons.map((polygon, index) => (
+
+            {polygonsArea.map((p, index) => (
                 <Polygon
                     key={index}
-                    coordinates={polygon}
-                    fillColor={polygon.inside ? "rgba(0,255,0,0.5)" : "rgba(255,0,0,0.5)"}
-                    strokeColor="rgba(255,0,0,1)" // Borde
+                    coordinates={p.coords}
+                    fillColor={p.inside ? "rgba(0,255,0,0.5)" : "rgba(255,0,0,0.5)"}
+                    strokeColor="rgba(255,0,0,1)"
                     strokeWidth={2}
                 />
             ))}
         </MapView>
     );
+
 };
 
 const styles = StyleSheet.create({

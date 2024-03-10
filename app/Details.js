@@ -7,11 +7,12 @@ import { ChallengesContext } from "../store/challenges-store";
 
 const Detail = ( {route}) => {
     const challengeId = useLocalSearchParams();
-    console.log(challengeId);
+
     const {item} = useContext(ChallengesContext);
     const findChallengeById = item.find(
         (challenge) => challenge.id === parseInt(challengeId.challenge_id)
     );
+    console.log(challengeId,"details",findChallengeById);
     return (
         <View>
             <Text>Detail Screen</Text>

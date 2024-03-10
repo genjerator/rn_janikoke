@@ -10,6 +10,7 @@ const Challenges = () => {
     const {item} = useContext(ChallengesContext);
     console.log(item,"Item");
     const handlePressItem = ({item}) => {
+        console.log(item.id,"SDSDS");
         router.push({pathname: `Details`, params: {"challenge_id":item.id}}); // Remove the braces in params
     };
 

@@ -13,7 +13,9 @@ export const fetchChallengesData = async () => {
 
 export const postInsidePolygon = async (payload) => {
     try {
-        const response = await axios.post(API_URL + '/round/inside/8', payload);
+        const url =API_URL + '/round/inside/8';
+        console.log(url,":url");
+        const response = await axios.post(url, payload);
         console.log(payload,"payload");
     } catch (error) {
         console.log(error, "Error");

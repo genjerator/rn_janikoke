@@ -4,3 +4,7 @@ npx expo start --tunnel
 
 npx expo publish  ???
 
+eas update
+
+//local
+expo start

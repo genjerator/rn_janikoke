@@ -8,6 +8,25 @@
       "expo-router"
     ],
     "name": "janikoke",
-    "slug": "janikoke"
+    "slug": "janikoke",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "31a8ff00-2f38-4f27-8741-72a979331f76"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/31a8ff00-2f38-4f27-8741-72a979331f76"
+    },
+    "android": {
+      "runtimeVersion": "1.0.0"
+    },
+    "ios": {
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
+    }
   }
 }

@@ -47,13 +47,13 @@ const WorldMap = ({challenge}) => {
 
                 setTextx(newLocation.timestamp + "::" + newLocation.coords.latitude + ":" + newLocation.coords.longitude);
                 const polygonsxxx = await processPolygonFromChallenge(newLocation, challenge)
-
+                console.log(challenge,"CHALLENGE");
                 const insidePolygon = polygonsxxx.find(polygon => polygon.inside !== false);
                 console.log('insidePolygon:', insidePolygon);
                 if (insidePolygon) {
                     console.log("First polygon with inside property true:", insidePolygon);
                     //postInsidePolygon({'user_id':1, 'area_id':insidePolygon.id,'challenge_id':insidePolygon.id})
-                    postInsidePolygon({'user_id':1, 'area_id':insidePolygon.inside,'challenge_id':2})
+                    postInsidePolygon({'user_id':1, 'area_id':insidePolygon.inside,'challenge_id':insidePolygon.id})
                 } else {
                     console.log("No polygon with inside property true found.");
                 }

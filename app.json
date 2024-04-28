@@ -21,7 +21,8 @@
       "url": "https://u.expo.dev/31a8ff00-2f38-4f27-8741-72a979331f76"
     },
     "android": {
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": "1.0.0",
+      "package": "com.genjerator.janikoke"
     },
     "ios": {
       "runtimeVersion": {

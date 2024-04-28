@@ -15,7 +15,7 @@ const Detail = ( {route}) => {
     console.log(challengeId,"details",findChallengeById);
     return (
         <View>
-            <Text>Detail Screen22</Text>
+            <Text>Detail Screen</Text>
             <Challenge challenge={findChallengeById}></Challenge>
         </View>
     );

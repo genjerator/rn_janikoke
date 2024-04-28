@@ -28,7 +28,6 @@ const Layout = () => {
 
     return (
         <ChallengesContext.Provider value={items}>
-            {/* You might want to pass the actual value of 'item' here */}
             <Stack />
         </ChallengesContext.Provider>
     );

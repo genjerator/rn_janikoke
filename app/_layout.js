@@ -1,8 +1,6 @@
 import { Stack } from "expo-router";
 import { ChallengesContext } from '../store/challenges-store';
-import axios from "axios";
 import { useEffect, useState } from "react";
-import {API_URL} from "../Constants";
 import {fetchChallengesData} from "../axios/ApiCalls";
 
 

@@ -49,21 +49,23 @@ export const polygoneer = (location = []) => {
 }
 
 export const processPolygonFromChallenge = async (location = [], challenge) => {
-    const test= challenge.areas.map((area, index) => ({
-        coords: area.polygons,
-        id: challenge.id,
-        name: challenge.name,
-        // distanceFromCenter:999,
-        distanceFromCenter: distanceFromCenterPolygon(
-            (location && location.coords && location.coords.latitude) ?? 45.8,
-            (location && location.coords && location.coords.longitude) ?? 9.3, area.polygons),//distanceFromCenterPolygon(location?.coords?.latitude, location?.coords?.longitude, challenge.polygons),
-        loc: (location && location.coords && location.coords.latitude),
-        inside: geolib.isPointInPolygon({
-            latitude: (location && location.coords && location.coords.latitude) ?? 45.8,
-            longitude: (location && location.coords && location.coords.longitude) ?? 9.3,
-        }, area.polygons)? area.id : false
-    }));
-    return test
+
+    const test = challenge.areas.map((area, index) => {
+        const inside = getStatusForInside(location, area, area.status);
+        return {
+            coords: area.polygons,
+            id: challenge.id,
+            name: challenge.name,
+            distanceFromCenter: distanceFromCenterPolygon(
+                (location && location.coords && location.coords.latitude) ?? 45.8,
+                (location && location.coords && location.coords.longitude) ?? 9.3, area.polygons),
+            loc: (location && location.coords && location.coords.latitude),
+            status: area.status,
+            inside: inside,
+            color: getPolygonColor(area.status, inside)
+        };
+    });
+    return test;
 }
 export const testCenter = geolib.getCenter(polygonCoordinates);
 
@@ -73,4 +75,24 @@ export const distanceFromCenterPolygon = (lat, lng, polygon) => {
         return geolib.getDistance({latitude: lat, longitude: lng}, center);
     }
     return 666;
+}
+
+const getStatusForInside = (location, area, status) => {
+    const inside = geolib.isPointInPolygon({
+        latitude: (location && location.coords && location.coords.latitude) ?? 45.8,
+        longitude: (location && location.coords && location.coords.longitude) ?? 9.3,
+    }, area.polygons) ? area.id : false
+    return inside && status === 0;
+}
+const getPolygonColor = (inside, status) => {
+    switch (true) {
+        case (status === 1):
+            return "rgba(0,155,0,0.5)";//red
+        case (inside !== true && status === 0) :
+            return "rgba(0,0,255,0.5)";//blue
+        // case (inside === true && status === 0) :
+        //     return "rgba(255,0,0,0.5)";//green
+        default:
+            return "rgba(0,0,255,0.5)";//blue
+    }
 }

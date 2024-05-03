@@ -50,9 +50,8 @@ const WorldMap = ({challenge}) => {
                 console.log(challenge,"CHALLENGE");
                 const insidePolygon = polygonsxxx.find(polygon => polygon.inside !== false);
                 console.log('insidePolygon:', insidePolygon);
-                if (insidePolygon) {
+                if (insidePolygon && insidePolygon.inside && insidePolygon.status === 0) {
                     console.log("First polygon with inside property true:", insidePolygon);
-                    //postInsidePolygon({'user_id':1, 'area_id':insidePolygon.id,'challenge_id':insidePolygon.id})
                     postInsidePolygon({'user_id':1, 'area_id':insidePolygon.inside,'challenge_id':insidePolygon.id})
                 } else {
                     console.log("No polygon with inside property true found.");
@@ -87,7 +86,7 @@ const WorldMap = ({challenge}) => {
                         <Polygon
                             key={index}
                             coordinates={polygon.coords}
-                            fillColor={polygon.inside ? "rgba(0,255,0,0.5)" : "rgba(255,0,0,0.5)"}
+                            fillColor={polygon.color}
                             strokeColor="rgba(255,0,0,1)"
                             strokeWidth={2}
                         />

@@ -1,12 +1,7 @@
-import {View, Text} from "react-native";
-import React, {useEffect, useState} from 'react';
-import * as Location from 'expo-location';
+import {View} from "react-native";
+import React, { useState} from 'react';
 import moment from 'moment';
 import WorldMap from '../component/WorldMap'
-import {
-    distanceFromCenterPolygon,
-    processPolygonFromChallenge
-} from "./Polygons";
 
 const Challenge = ({challenge}) => {
     const [errorMsg, setErrorMsg] = useState(null);

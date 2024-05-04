@@ -50,7 +50,7 @@ const WorldMap = ({challenge}) => {
                 console.log(challenge,"CHALLENGE");
                 const insidePolygon = polygonsxxx.find(polygon => polygon.inside !== false);
                 console.log('insidePolygon:', insidePolygon);
-                if (insidePolygon && insidePolygon.inside && insidePolygon.status === 0) {
+                if (insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
                     console.log("First polygon with inside property true:", insidePolygon);
                     postInsidePolygon({'user_id':1, 'area_id':insidePolygon.inside,'challenge_id':insidePolygon.id})
                 } else {

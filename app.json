@@ -27,7 +27,8 @@
     "ios": {
       "runtimeVersion": {
         "policy": "appVersion"
-      }
+      },
+      "bundleIdentifier": "com.genjerator.janikoke"
     }
   }
 }

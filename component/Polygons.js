@@ -51,7 +51,7 @@ export const polygoneer = (location = []) => {
 export const processPolygonFromChallenge = async (location = [], challenge) => {
 
     const test = challenge.areas.map((area, index) => {
-        const inside = getStatusForInside(location, area, area.status);
+        const inside = isInsidePolygon(location, area, area.status);
         return {
             coords: area.polygons,
             id: challenge.id,
@@ -62,7 +62,7 @@ export const processPolygonFromChallenge = async (location = [], challenge) => {
             loc: (location && location.coords && location.coords.latitude),
             status: area.status,
             inside: inside,
-            color: getPolygonColor(area.status, inside)
+            color: getPolygonColor(inside, area.status)
         };
     });
     return test;
@@ -77,22 +77,24 @@ export const distanceFromCenterPolygon = (lat, lng, polygon) => {
     return 666;
 }
 
-const getStatusForInside = (location, area, status) => {
+const isInsidePolygon = (location, area, status) => {
     const inside = geolib.isPointInPolygon({
         latitude: (location && location.coords && location.coords.latitude) ?? 45.8,
         longitude: (location && location.coords && location.coords.longitude) ?? 9.3,
     }, area.polygons) ? area.id : false
-    return inside && status === 0;
+    return inside;
 }
 const getPolygonColor = (inside, status) => {
+console.log(inside===7,status===1);
+console.log("getPolygonColor");
     switch (true) {
+        case (inside!==false && status===0) :
+            return "rgba(0,0,0,0.5)";//black
         case (status === 1):
-            return "rgba(0,155,0,0.5)";//red
-        case (inside !== true && status === 0) :
+            return "rgba(255,0,0,0.5)";//red
+        case (!inside && status === 0) :
             return "rgba(0,0,255,0.5)";//blue
-        // case (inside === true && status === 0) :
-        //     return "rgba(255,0,0,0.5)";//green
         default:
-            return "rgba(0,0,255,0.5)";//blue
+            return "rgba(0,0,155,0.5)";//blue
     }
 }

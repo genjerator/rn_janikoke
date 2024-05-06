@@ -1,10 +1,14 @@
 import axios from "axios";
 import {API_URL} from "../Constants";
+import {useChallenges} from "../context/ChallengesContext";
 
 export const fetchChallengesData = async () => {
+
     const url = API_URL + '/round/1';
+
     try {
         const response = await axios.get(url);
+
         return response.data;
     } catch (error) {
         console.log(error, "Error:"+url);

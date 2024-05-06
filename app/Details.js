@@ -3,15 +3,17 @@ import React, {useContext} from 'react';
 import { View, Text } from 'react-native';
 import {useLocalSearchParams} from "expo-router";
 import Challenge from "../component/Challenge";
-import { ChallengesContext } from "../store/challenges-store";
+import {useChallenges} from "../context/ChallengesContext";
 
 const Detail = ( {route}) => {
     const challengeId = useLocalSearchParams();
 
-    const {item} = useContext(ChallengesContext);
-    const findChallengeById = item.find(
+    const { items } = useChallenges();
+
+    const findChallengeById = items.find(
         (challenge) => challenge.id === parseInt(challengeId.challenge_id)
     );
+
     console.log(challengeId,"details",findChallengeById);
     return (
         <View>

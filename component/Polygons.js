@@ -49,8 +49,9 @@ export const polygoneer = (location = []) => {
 }
 
 export const processPolygonFromChallenge = async (location = [], challenge) => {
+    try {
+    return challenge.areas.map((area, index) => {
 
-    const test = challenge.areas.map((area, index) => {
         const inside = isInsidePolygon(location, area, area.status);
         return {
             coords: area.polygons,
@@ -64,8 +65,13 @@ export const processPolygonFromChallenge = async (location = [], challenge) => {
             inside: inside,
             color: getPolygonColor(inside, area.status)
         };
+
     });
-    return test;
+    } catch (error) {
+        console.error("Error occurred:", error);
+        // Handle the error, e.g., return a default value or log it
+        return null;
+    }
 }
 export const testCenter = geolib.getCenter(polygonCoordinates);
 

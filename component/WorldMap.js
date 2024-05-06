@@ -7,11 +7,9 @@ import {
     Dimensions,
     Image,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import MapView, {Marker, Polygon} from "react-native-maps";
 import {processPolygonFromChallenge} from "./Polygons";
-import Constants from "expo-constants/src/Constants";
 import {postInsidePolygon} from "../axios/ApiCalls";
 
 const WorldMap = ({challenge}) => {
@@ -20,45 +18,52 @@ const WorldMap = ({challenge}) => {
     const [polygons, setPolygons] = useState([]);
     const [textx, setTextx] = useState("Loading...");
 
-    //console.log(challenge.polygons,"worldmap");
-
     useEffect(options => {
         const getLocation = async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== "granted") {
-                console.log("Permission to access location was denied");
-                return;
-            }
-
-            let location = await Location.watchPositionAsync({
-                accuracy: Location.Accuracy.Highest,
-                timeInterval: 5000, // update interval in milliseconds
-                distanceInterval: 1, // minimum distance between updates in meters
-            }, async (newLocation) => {
-                setCurrentLocation(newLocation);
-                console.log('Location changed:', newLocation);
-                setInitialRegion({
-                    latitude: newLocation.coords.latitude,
-                    longitude: newLocation.coords.longitude,
-                    latitudeDelta: 0.005,
-                    longitudeDelta: 0.005,
-                });
-
-
-                setTextx(newLocation.timestamp + "::" + newLocation.coords.latitude + ":" + newLocation.coords.longitude);
-                const polygonsxxx = await processPolygonFromChallenge(newLocation, challenge)
-                console.log(challenge,"CHALLENGE");
-                const insidePolygon = polygonsxxx.find(polygon => polygon.inside !== false);
-                console.log('insidePolygon:', insidePolygon);
-                if (insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
-                    console.log("First polygon with inside property true:", insidePolygon);
-                    postInsidePolygon({'user_id':1, 'area_id':insidePolygon.inside,'challenge_id':insidePolygon.id})
-                } else {
-                    console.log("No polygon with inside property true found.");
+            try {
+                let {status} = await Location.requestForegroundPermissionsAsync();
+                if (status !== "granted") {
+                    console.log("Permission to access location was denied");
+                    return;
                 }
-                // console.log('initialRegion:', initialRegion);
-                setPolygons(polygonsxxx);
-            });
+
+                let location = await Location.watchPositionAsync({
+                    accuracy: Location.Accuracy.Highest,
+                    timeInterval: 5000, // update interval in milliseconds
+                    distanceInterval: 1, // minimum distance between updates in meters
+                }, async (newLocation) => {
+                    setCurrentLocation(newLocation);
+                    console.log('Location changed:', newLocation);
+                    setInitialRegion({
+                        latitude: newLocation.coords.latitude,
+                        longitude: newLocation.coords.longitude,
+                        latitudeDelta: 0.005,
+                        longitudeDelta: 0.005,
+                    });
+
+
+                    setTextx(newLocation.timestamp + "::" + newLocation.coords.latitude + ":" + newLocation.coords.longitude);
+                    const polygonsxxx = await processPolygonFromChallenge(newLocation, challenge)
+                    console.log(challenge, "CHALLENGE");
+                    const insidePolygon = polygonsxxx.find(polygon => polygon.inside !== false);
+                    console.log('insidePolygon:', insidePolygon);
+
+
+                    if (insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
+                        console.log("First polygon with inside property true:", insidePolygon);
+                        postInsidePolygon({
+                            'user_id': 1,
+                            'area_id': insidePolygon.inside,
+                            'challenge_id': insidePolygon.id
+                        })
+                    } else {
+                        console.log("No polygon with inside property true found.");
+                    }
+                    setPolygons(polygonsxxx);
+                });
+            }catch (e) {
+                console.log(e)
+            }
         };
 
         getLocation();

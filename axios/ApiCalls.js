@@ -26,3 +26,16 @@ export const postInsidePolygon = async (payload) => {
         console.log(error, "Error");
     }
 };
+
+export const fetchResults = async () => {
+
+    const url = API_URL + '/round/1/result';
+
+    try {
+        const response = await axios.get(url);
+
+        return response.data;
+    } catch (error) {
+        console.log(error, "Error:"+url);
+    }
+};

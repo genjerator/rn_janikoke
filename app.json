@@ -5,7 +5,9 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      [
+        "expo-router"
+      ]
     ],
     "name": "janikoke",
     "slug": "janikoke",
@@ -24,11 +26,7 @@
       "runtimeVersion": "1.0.0",
       "package": "com.genjerator.janikoke"
     },
-    "ios": {
-      "runtimeVersion": {
-        "policy": "appVersion"
-      },
-      "bundleIdentifier": "com.genjerator.janikoke"
-    }
+    "runtimeVersion": "1.0.0",
+    "ios": {}
   }
 }

@@ -1,10 +1,8 @@
 
-import React, {useEffect, useState,useContext} from 'react';
+import React from 'react';
 import {View, FlatList, Button} from 'react-native';
 import ChallengeListItem from './list/ChallengeListItem';
 import {router} from "expo-router";
-import axios from "axios";
-import {ChallengesContext} from "../store/challenges-store"
 import {useChallenges} from "../context/ChallengesContext";
 import {fetchChallengesData} from "../axios/ApiCalls";
 
@@ -18,6 +16,9 @@ const Challenges = () => {
     const handleRefresh = async () => {
         await fetchChallengesData();
     };
+    const handleResults = async () => {
+        router.push({pathname: `Results`});
+    };
 
     return (
         <View>
@@ -27,6 +28,7 @@ const Challenges = () => {
                 renderItem={({item}) => <ChallengeListItem item={item} onPressItem={handlePressItem}/>}
             />
             <Button title="Refresh" onPress={handleRefresh}></Button>
+            <Button title="Results" onPress={handleResults}></Button>
         </View>
     );
 };

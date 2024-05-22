@@ -7,7 +7,7 @@ import {useChallenges} from "../context/ChallengesContext";
 import {fetchChallengesData} from "../axios/ApiCalls";
 
 const Challenges = () => {
-    const { items, setChallenges } = useChallenges();
+    const { items } = useChallenges();
 
     const handlePressItem = ({item}) => {
         console.log(item.id,"SDSDS");

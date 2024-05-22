@@ -21,7 +21,7 @@ export const postInsidePolygon = async (payload) => {
         console.log(url,":url");
         console.log(payload,"payload");
         const response = await axios.post(url, payload);
-
+        console.log(response,":response");
     } catch (error) {
         console.log(error, "Error");
     }

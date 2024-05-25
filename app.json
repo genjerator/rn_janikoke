@@ -27,6 +27,8 @@
       "package": "com.genjerator.janikoke"
     },
     "runtimeVersion": "1.0.0",
-    "ios": {}
+    "ios": {
+      "bundleIdentifier": "com.genjerator.janikoke"
+    }
   }
 }

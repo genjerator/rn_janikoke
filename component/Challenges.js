@@ -19,7 +19,9 @@ const Challenges = () => {
     const handleResults = async () => {
         router.push({pathname: `Results`});
     };
-
+    const handleLogin = async () => {
+        router.push({pathname: `Login`});
+    };
     return (
         <View>
             <FlatList
@@ -29,6 +31,7 @@ const Challenges = () => {
             />
             <Button title="Refresh" onPress={handleRefresh}></Button>
             <Button title="Results" onPress={handleResults}></Button>
+            <Button title="Login" onPress={handleLogin}></Button>
         </View>
     );
 };

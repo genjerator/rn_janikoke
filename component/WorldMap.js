@@ -11,14 +11,17 @@ import * as Location from "expo-location";
 import MapView, {Marker, Polygon} from "react-native-maps";
 import {processPolygonFromChallenge} from "./Polygons";
 import {postInsidePolygon} from "../axios/ApiCalls";
+import {useUser} from "../context/UserContext";
 
 const WorldMap = ({challenge}) => {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [initialRegion, setInitialRegion] = useState(null);
     const [polygons, setPolygons] = useState([]);
     const [textx, setTextx] = useState("Loading...");
-
+    const {  user,loadUserData } = useUser();
     useEffect(options => {
+
+        console.log(user,"user");
         const getLocation = async () => {
             try {
                 let {status} = await Location.requestForegroundPermissionsAsync();
@@ -51,8 +54,9 @@ const WorldMap = ({challenge}) => {
 
                     if (insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
                         console.log("First polygon with inside property true:", insidePolygon);
+
                         postInsidePolygon({
-                            'user_id': 1,
+                            'user_id': user.id,
                             'area_id': insidePolygon.inside,
                             'challenge_id': insidePolygon.id
                         })

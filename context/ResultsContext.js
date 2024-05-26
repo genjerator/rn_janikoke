@@ -13,6 +13,9 @@ const ResultsProvider = ({ children }) => {
     // };
     const sumPoints = ()  => {
         console.log("resultxxx",items);
+        if(!items){
+            return 0
+        }
         return Object.values(items).reduce((sum, challenge) => sum + challenge.points, 0);
     };
 

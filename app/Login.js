@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import axios from 'axios';
+import {API_URL} from "../Constants";
+import {useChallenges} from "../context/ChallengesContext";
+import {useUser} from "../context/UserContext";
+import {router} from "expo-router";
 
 const Login = ({ setToken }) => {
+    const { user, setUser,setSignedUser } = useUser();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
+        console.log("login button")
         try {
-            const response = await axios.post('https://your-app-url/api/login', {
+            const url =API_URL + '/login';
+            const response = await axios.post(url, {
                 email: email,
                 password: password
             });
 
-            const token = response.data.token;
-            setToken(token); // Store token in state or AsyncStorage
+            const user = response.data;
+            setSignedUser(response.data);
+            console.log("llll",user)
+            if(user && user.name){
+                router.push({pathname: ``});
+            }
 
-            // Navigate to the next screen or perform any other action
-            // Example: navigation.navigate('Home');
         } catch (error) {
             console.error('Login error:', error);
             // Handle error (e.g., show error message)
@@ -40,7 +49,7 @@ const Login = ({ setToken }) => {
                 value={password}
                 secureTextEntry
             />
-            <Button title="Login" onPress={handleLogin} />
+            <Button title="Loginx" onPress={handleLogin} />
         </View>
     );
 };

@@ -63,7 +63,7 @@ const Home = () => {
                 <Button title="Results" onPress={handleResults}></Button>
                 {(user && user.name) ? (
                     <Button title="Logout" onPress={handleLogout}/>
-                ) :""}
+                ) :<Button title="Login" onPress={handleLogin}/>}
             </View>
         </>
     );

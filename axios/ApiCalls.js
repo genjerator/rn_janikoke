@@ -1,28 +1,52 @@
 import axios from "axios";
 import {API_URL} from "../Constants";
-import {useChallenges} from "../context/ChallengesContext";
 
-export const fetchChallengesData = async () => {
+export const fetchChallengesData = async (user) => {
 
     const url = API_URL + '/round/1';
-
+    console.log(url)
     try {
-        const response = await axios.get(url);
-
+        const response = await axios.get(url,{
+            headers: {
+                'Authorization': `Bearer ${user ? user.token : ''}` // Include bearer token in the headers
+            }
+        });
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.log(error, "Error:"+url);
     }
 };
 
-export const postInsidePolygon = async (payload) => {
+export const postInsidePolygon = async (payload,user) => {
     try {
         const url =API_URL + '/round/inside/1';
         console.log(url,":url");
         console.log(payload,"payload");
-        const response = await axios.post(url, payload);
+        const response = await axios.post(url, payload,{
+            headers: {
+                'Authorization': `Bearer ${user ? user.token : ''}` // Include bearer token in the headers
+            }
+        });
 
     } catch (error) {
         console.log(error, "Error");
+    }
+};
+
+export const fetchResults = async (user) => {
+
+    const url = API_URL + '/round/1/result';
+
+    try {
+        const response = await axios.get(url,{
+            headers: {
+                'Authorization': `Bearer ${user ? user.token : ''}` // Include bearer token in the headers
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.log(error, "Error:"+url);
     }
 };

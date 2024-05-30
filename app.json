@@ -30,7 +30,12 @@
     },
     "android": {
       "runtimeVersion": "1.0.0",
-      "package": "com.genjerator.janikoke"
+      "package": "com.genjerator.janikoke",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAoYqKUc0h6YpGZsXgwRvSH8h4lD-OdCPI"
+        }
+      }
     },
     "ios": {
       "runtimeVersion": {

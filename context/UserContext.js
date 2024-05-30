@@ -8,10 +8,15 @@ const UserProvider = ({children}) => {
     const [user, setUser] = useState({});
     const loadUserData = async () => {
         try {
+            console.log("userstart");
             const userData = await AsyncStorage.getItem('user');
+            console.log("userend2",userData);
             if (userData) {
+                console.log("userend3",user);
                 setUser(JSON.parse(userData));
+                console.log("userend4",user);
             }
+            console.log("userend5",user);
         } catch (error) {
             console.error('Failed to load user data:', error);
         }

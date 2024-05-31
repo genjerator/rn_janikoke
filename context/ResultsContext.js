@@ -8,19 +8,9 @@ const ResultsProvider = ({ children }) => {
     const setResults = (items) => {
         setItems(items);
     };
-    // const addResults = (items) => {
-    //     setItems(items);
-    // };
-    const sumPoints = ()  => {
-        console.log("resultxxx",items);
-        if(!items){
-            return 0
-        }
-        return Object.values(items).reduce((sum, challenge) => sum + challenge.points, 0);
-    };
 
     return (
-        <ResultsContext.Provider value={{ items, setResults,sumPoints }}>
+        <ResultsContext.Provider value={{ items, setResults }}>
             {children}
         </ResultsContext.Provider>
     );

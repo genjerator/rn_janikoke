@@ -20,7 +20,7 @@ const WorldMap = ({challenge}) => {
     const [textx, setTextx] = useState("Loading...");
     const {  user,loadUserData } = useUser();
     useEffect(options => {
-
+        loadUserData();
         console.log(user,"user");
         const getLocation = async () => {
             try {
@@ -49,17 +49,14 @@ const WorldMap = ({challenge}) => {
                     const polygonsxxx = await processPolygonFromChallenge(newLocation, challenge)
                     // console.log(challenge, "CHALLENGE");
                     const insidePolygon = polygonsxxx.find(polygon => polygon.inside !== false);
-                    // console.log('insidePolygon:', insidePolygon);
-
 
                     if (insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
                         console.log("First polygon with inside property true:", insidePolygon);
 
                         postInsidePolygon({
-                            'user_id': user.id,
                             'area_id': insidePolygon.inside,
                             'challenge_id': insidePolygon.id
-                        })
+                        },user)
                     } else {
                         console.log("No polygon with inside property true found.");
                     }

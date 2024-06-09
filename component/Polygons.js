@@ -91,7 +91,6 @@ const isInsidePolygon = (location, area, status) => {
     return inside;
 }
 const getPolygonColor = (inside, status) => {
-console.log(inside===7,status===1);
 console.log("getPolygonColor");
     switch (true) {
         case (inside!==false && status===0) :

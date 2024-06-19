@@ -8,17 +8,9 @@ import {router} from "expo-router";
 
 const Home = () => {
     const {setChallenges} = useChallenges();
-    const {user,loadUserData, clearUser} = useUser();
-    const [challengeText,setChallengeText] = useState("");
+    const {user, loadUserData, clearUser} = useUser();
+    const [challengeText, setChallengeText] = useState("");
 
-    const handleRefresh = async () => {
-
-        try {
-            await fetchChallengesData();
-        } catch (e) {
-            console.log(e);
-        }
-    };
     const handleResults = async () => {
         router.push({pathname: `Results`});
     };
@@ -49,12 +41,12 @@ const Home = () => {
         setChallengeText("Welcome ");
     }, []);
     useEffect(() => {
-        console.log("kjkjk",user);
+        console.log("kjkjk", user);
 
 
         if (user && user.name) {
             fetchData();
-        }else{
+        } else {
             //router.push({pathname: `Login`});
         }
     }, [user]);
@@ -63,13 +55,14 @@ const Home = () => {
     return (
         <>
             <View>
-                <Text>{challengeText} {(user && user.name) ?? ''}</Text>
-                <Challenges></Challenges>
-                {/*<Button title="Refresh" onPress={handleRefresh}></Button>*/}
-                <Button title="Results" onPress={handleResults}></Button>
                 {(user && user.name) ? (
-                    <Button title="Logout" onPress={handleLogout}/>
-                ) :<Button title="Login" onPress={handleLogin}/>}
+                    <View>
+                        <Text>{challengeText} {(user && user.name) ?? ''}</Text>
+                        <Challenges></Challenges>
+                        <Button title="Results" onPress={handleResults}></Button>
+                        <Button title="Logoutx" onPress={handleLogout}/>
+                    </View>
+                ) : <Button title="Login" onPress={handleLogin}/>}
             </View>
         </>
     );

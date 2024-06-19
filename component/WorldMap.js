@@ -1,27 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     StyleSheet,
     View,
     TouchableOpacity,
     Text,
     Dimensions,
-    Image,
+    Vibration,
 } from "react-native";
 import * as Location from "expo-location";
 import MapView, {Marker, Polygon} from "react-native-maps";
 import {processPolygonFromChallenge} from "./Polygons";
-import {postInsidePolygon} from "../axios/ApiCalls";
+import {fetchChallengesData, postInsidePolygon} from "../axios/ApiCalls";
 import {useUser} from "../context/UserContext";
+import {useChallenges} from "../context/ChallengesContext";
+
 
 const WorldMap = ({challenge}) => {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [initialRegion, setInitialRegion] = useState(null);
     const [polygons, setPolygons] = useState([]);
     const [textx, setTextx] = useState("Loading...");
-    const {  user,loadUserData } = useUser();
+    const {user, loadUserData} = useUser();
+    const {setChallenges,getChallenges} = useChallenges();
     useEffect(options => {
         loadUserData();
-        console.log(user,"user");
+        console.log(user, "user");
         const getLocation = async () => {
             try {
                 let {status} = await Location.requestForegroundPermissionsAsync();
@@ -47,22 +50,32 @@ const WorldMap = ({challenge}) => {
 
                     setTextx(newLocation.timestamp + "::" + newLocation.coords.latitude + ":" + newLocation.coords.longitude);
                     const polygonsxxx = await processPolygonFromChallenge(newLocation, challenge)
-                    // console.log(challenge, "CHALLENGE");
+                     console.log(JSON.stringify(polygonsxxx), "CHALLENGE");
                     const insidePolygon = polygonsxxx.find(polygon => polygon.inside !== false);
 
                     if (insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
                         console.log("First polygon with inside property true:", insidePolygon);
 
-                        postInsidePolygon({
+                        const ok = postInsidePolygon({
                             'area_id': insidePolygon.inside,
                             'challenge_id': insidePolygon.id
-                        },user)
+                        }, user)
+                        console.log("1111:", ok)
+                        if (ok) {
+                            try {
+                                Vibration.vibrate(1000,false)
+                                const data = await fetchChallengesData(user);
+                                setChallenges(data)
+                            } catch (error) {
+                                console.log("sdfsdffds")
+                            }
+                        }
                     } else {
                         console.log("No polygon with inside property true found.");
                     }
                     setPolygons(polygonsxxx);
                 });
-            }catch (e) {
+            } catch (e) {
                 console.log(e)
             }
         };
@@ -72,7 +85,7 @@ const WorldMap = ({challenge}) => {
 
     return (
 
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
             <View style={styles.textContainer}>
                 <Text style={styles.text}>{textx}</Text>
             </View>

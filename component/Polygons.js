@@ -90,6 +90,24 @@ const isInsidePolygon = (location, area, status) => {
     }, area.polygons) ? area.id : false
     return inside;
 }
+
+export const replaceAreaInChallenge = (challenges, challengeId, newArea) => {
+    return challenges.map(challenge => {
+        if (challenge.id === challengeId) {
+            const updatedAreas = challenge.areas.map(area => {
+                if (area.id === newArea.id) {
+                    return newArea;
+                }
+                return area;
+            });
+            return {
+                ...challenge,
+                areas: updatedAreas
+            };
+        }
+        return challenge;
+    });
+};
 const getPolygonColor = (inside, status) => {
 console.log("getPolygonColor");
     switch (true) {

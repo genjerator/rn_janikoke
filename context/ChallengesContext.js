@@ -8,10 +8,13 @@ const ChallengesProvider = ({ children }) => {
     const setChallenges = (items) => {
         setItems(items);
     };
+    const getChallenges = () => {
+        return items
+    };
 
 
     return (
-        <ChallengesContext.Provider value={{ items, setChallenges }}>
+        <ChallengesContext.Provider value={{ items, setChallenges,getChallenges }}>
             {children}
         </ChallengesContext.Provider>
     );

@@ -14,6 +14,7 @@ const Results = ({route}) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setResults([])
                 const data = await fetchResults(user);
                 setResults(data)
                 console.log("results", items);

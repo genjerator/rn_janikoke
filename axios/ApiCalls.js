@@ -28,7 +28,8 @@ export const postInsidePolygon = async (payload,user) => {
                 'Authorization': `Bearer ${user ? user.token : ''}` // Include bearer token in the headers
             }
         });
-
+        console.log(response.data)
+        return response.data.status ?? false
     } catch (error) {
         console.log(error, "Error");
     }

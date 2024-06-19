@@ -13,6 +13,12 @@
             "usesCleartextTraffic": true
           }
         }
+      ],
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-usah3m5hn5jj5zf6.us.auth0.com"
+        }
       ]
     ],
     "name": "janikoke",
@@ -30,7 +36,12 @@
     },
     "android": {
       "runtimeVersion": "1.0.0",
-      "package": "com.genjerator.janikoke"
+      "package": "com.genjerator.janikoke",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAoYqKUc0h6YpGZsXgwRvSH8h4lD-OdCPI"
+        }
+      }
     },
     "ios": {
       "runtimeVersion": {

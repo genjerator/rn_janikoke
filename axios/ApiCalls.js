@@ -4,15 +4,14 @@ import {API_URL} from "../Constants";
 export const fetchChallengesData = async (user) => {
 
     const url = API_URL + '/round/1';
-    console.log(url)
+    console.log(url, new Date().toLocaleString())
     try {
-        const response = await axios.get(url,{
+
+        return await axios.get(url,{
             headers: {
                 'Authorization': `Bearer ${user ? user.token : ''}` // Include bearer token in the headers
             }
         });
-        console.log(response.data);
-        return response.data;
     } catch (error) {
         console.log(error, "Error:"+url);
     }
@@ -28,7 +27,7 @@ export const postInsidePolygon = async (payload,user) => {
                 'Authorization': `Bearer ${user ? user.token : ''}` // Include bearer token in the headers
             }
         });
-        console.log(response.data)
+        console.log(response.data,response.data.status ?? false)
         return response.data.status ?? false
     } catch (error) {
         console.log(error, "Error");

@@ -1,4 +1,5 @@
 import * as geolib from "geolib";
+import {fetchChallengesData} from "../axios/ApiCalls";
 
 
 export const polygonCoordinates = [{longitude: 19.840782, latitude: 45.239443}, {
@@ -62,6 +63,7 @@ export const processPolygonFromChallenge = async (location = [], challenge) => {
                 (location && location.coords && location.coords.longitude) ?? 9.3, area.polygons),
             loc: (location && location.coords && location.coords.latitude),
             status: area.status,
+            area_id: area.id,
             inside: inside,
             color: getPolygonColor(inside, area.status)
         };
@@ -108,7 +110,7 @@ export const replaceAreaInChallenge = (challenges, challengeId, newArea) => {
         return challenge;
     });
 };
-const getPolygonColor = (inside, status) => {
+export const getPolygonColor = (inside, status) => {
 console.log("getPolygonColor");
     switch (true) {
         case (inside!==false && status===0) :
@@ -118,6 +120,30 @@ console.log("getPolygonColor");
         case (!inside && status === 0) :
             return "rgba(0,0,255,0.5)";//blue
         default:
-            return "rgba(0,0,155,0.5)";//blue
+            return "rgba(0,250,55,0.5)";//green
     }
 }
+
+export const waitForChallengesData = async (user) => {
+    const start = Date.now();
+
+    try {
+        const response = await fetchChallengesData(user)
+
+        const duration = Date.now() - start;
+        const remainingTime = 5000 - duration;
+
+        if (remainingTime > 0) {
+            await wait(remainingTime);
+        }
+
+
+        console.log('Response:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+};
+//another file helper
+export const wait = (n) => new Promise((resolve) => setTimeout(resolve, n));

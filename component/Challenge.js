@@ -6,7 +6,7 @@ import WorldMap from '../component/WorldMap'
 const Challenge = ({challenge}) => {
     const [errorMsg, setErrorMsg] = useState(null);
     const [currentTimestamp, setCurrentTimestamp] = useState(moment.now());
-    console.log(challenge,"challenge");
+    //console.log(challenge,"challenge");
     let text = 'Waiting...';
 
     if (errorMsg) {

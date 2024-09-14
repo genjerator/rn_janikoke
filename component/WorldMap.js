@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import * as Location from "expo-location";
 import MapView, {Marker, Polygon} from "react-native-maps";
-import {processPolygonFromChallenge} from "./Polygons";
+import {getPolygonColor, processPolygonFromChallenge, waitForChallengesData} from "./Polygons";
 import {fetchChallengesData, postInsidePolygon} from "../axios/ApiCalls";
 import {useUser} from "../context/UserContext";
 import {useChallenges} from "../context/ChallengesContext";
@@ -21,7 +21,7 @@ const WorldMap = ({challenge}) => {
     const [polygons, setPolygons] = useState([]);
     const [textx, setTextx] = useState("Loading...");
     const {user, loadUserData} = useUser();
-    const {setChallenges,getChallenges} = useChallenges();
+    const {setChallenges, getChallenges} = useChallenges();
     useEffect(options => {
         loadUserData();
         console.log(user, "user");
@@ -36,53 +36,81 @@ const WorldMap = ({challenge}) => {
                 let location = await Location.watchPositionAsync({
                     accuracy: Location.Accuracy.Highest,
                     timeInterval: 5000, // update interval in milliseconds
-                    distanceInterval: 1, // minimum distance between updates in meters
+                    //distanceInterval: 1, // minimum distance between updates in meters
                 }, async (newLocation) => {
                     setCurrentLocation(newLocation);
-                    console.log('Location changed:', newLocation);
+                    console.log('Location changed:', newLocation, new Date().toLocaleString());
                     setInitialRegion({
                         latitude: newLocation.coords.latitude,
                         longitude: newLocation.coords.longitude,
                         latitudeDelta: 0.005,
                         longitudeDelta: 0.005,
                     });
-
-
-                    setTextx(newLocation.timestamp + "::" + newLocation.coords.latitude + ":" + newLocation.coords.longitude);
-                    const polygonsxxx = await processPolygonFromChallenge(newLocation, challenge)
-                     console.log(JSON.stringify(polygonsxxx), "CHALLENGE");
-                    const insidePolygon = polygonsxxx.find(polygon => polygon.inside !== false);
-
+                    await setTextx(newLocation.timestamp + ":" + newLocation.coords.latitude + ":" + newLocation.coords.longitude);
+                    var polygonsxxx = await processPolygonFromChallenge(newLocation, challenge)
+                    setPolygons(polygonsxxx);
+                    const insidePolygon = await polygonsxxx.find(polygon => polygon.inside !== false);
+                    await console.log("insidePolygons:", insidePolygon);
                     if (insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
                         console.log("First polygon with inside property true:", insidePolygon);
+                        console.log("2222:", insidePolygon.inside, insidePolygon.status, getPolygonColor(insidePolygon.inside, insidePolygon.status));
 
-                        const ok = postInsidePolygon({
+                        var ok = true;
+                        ok = await postInsidePolygon({
                             'area_id': insidePolygon.inside,
                             'challenge_id': insidePolygon.id
                         }, user)
-                        console.log("1111:", ok)
-                        if (ok) {
-                            try {
-                                Vibration.vibrate(1000,false)
-                                const data = await fetchChallengesData(user);
-                                setChallenges(data)
-                            } catch (error) {
-                                console.log("sdfsdffds")
-                            }
+                        console.log("ssssssaarsssssssss:", ok);
+
+
+                        if (ok===true && insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
+                            await Vibration.vibrate(1000, false)
+                            //Vibration.cancel();
+                            await delayxx(5000); // Wait for 5 seconds
+                            polygonsxxx = await processInside(insidePolygon,polygonsxxx);
+                            setPolygons(polygonsxxx);
+                            console.log(polygonsxxx, ok);
                         }
                     } else {
                         console.log("No polygon with inside property true found.");
                     }
-                    setPolygons(polygonsxxx);
-                });
+                })
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
         };
 
         getLocation();
     }, []);
+    const vibrateIfTrue = (condition) => {
+        if (condition) {
+            Vibration.vibrate(500); // Vibrates for 500 milliseconds (0.5 sec)
+        }
+    };
+    const delayxx = (ms) => {
+        return new Promise((resolve) =>
+            setTimeout(resolve, ms));
+    };
+    const processInside = (insidePolygon, polygonsxxx) => {
+        try {
+            console.log("before vibrate:x", new Date().getTime());
 
+
+            insidePolygon.status = 1;
+            insidePolygon.color = getPolygonColor(true, insidePolygon.status);
+            console.log("after vibrateeeeeeee:", new Date().getTime());
+            const t =  polygonsxxx.map(item => {
+                if (item.area_id === insidePolygon.area_id) {
+                    return insidePolygon;
+                }
+                return item;
+            });
+            console.log("after vibrats:", t);
+            return t;
+        } catch (error) {
+            console.log("ERRRROR",error)
+        }
+    }
     return (
 
         <View style={{flex: 1}}>

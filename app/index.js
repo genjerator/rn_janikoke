@@ -20,7 +20,7 @@ const Home = () => {
     const fetchData = async () => {
         try {
             const data = await fetchChallengesData(user);
-            setChallenges(data)
+            setChallenges(data.data)
             setChallengeText("Choose a challenge: ")
         } catch (error) {
             console.error('Error setting data:', error);
@@ -63,6 +63,7 @@ const Home = () => {
                         <Button title="Logoutx" onPress={handleLogout}/>
                     </View>
                 ) : <Button title="Login" onPress={handleLogin}/>}
+
             </View>
         </>
     );

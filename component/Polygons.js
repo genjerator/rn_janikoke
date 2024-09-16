@@ -49,26 +49,27 @@ export const polygoneer = (location = []) => {
     }));
 }
 
-export const processPolygonFromChallenge = async (location = [], challenge) => {
+export const processPolygonFromChallenge = (location = [], challenge) => {
     try {
-    return challenge.areas.map((area, index) => {
+        return challenge.areas.map((area, index) => {
 
-        const inside = isInsidePolygon(location, area, area.status);
-        return {
-            coords: area.polygons,
-            id: challenge.id,
-            name: challenge.name,
-            distanceFromCenter: distanceFromCenterPolygon(
-                (location && location.coords && location.coords.latitude) ?? 45.8,
-                (location && location.coords && location.coords.longitude) ?? 9.3, area.polygons),
-            loc: (location && location.coords && location.coords.latitude),
-            status: area.status,
-            area_id: area.id,
-            inside: inside,
-            color: getPolygonColor(inside, area.status)
-        };
+            const inside = isInsidePolygon(location, area, area.status);
+            console.log("INSIDE:",inside,"location:",location)
+            return {
+                coords: area.polygons,
+                id: challenge.id,
+                name: challenge.name,
+                distanceFromCenter: distanceFromCenterPolygon(
+                    (location && location.coords && location.coords.latitude) ?? 45.8,
+                    (location && location.coords && location.coords.longitude) ?? 9.3, area.polygons),
+                loc: (location && location.coords && location.coords.latitude),
+                status: area.status,
+                area_id: area.id,
+                inside: inside,
+                color: getPolygonColor(inside, area.status)
+            };
 
-    });
+        });
     } catch (error) {
         console.error("Error occurred:", error);
         // Handle the error, e.g., return a default value or log it
@@ -87,8 +88,8 @@ export const distanceFromCenterPolygon = (lat, lng, polygon) => {
 
 const isInsidePolygon = (location, area, status) => {
     const inside = geolib.isPointInPolygon({
-        latitude: (location && location.coords && location.coords.latitude) ?? 45.8,
-        longitude: (location && location.coords && location.coords.longitude) ?? 9.3,
+        latitude: (location && location.coords && location.coords.latitude),
+        longitude: (location && location.coords && location.coords.longitude),
     }, area.polygons) ? area.id : false
     return inside;
 }
@@ -111,9 +112,9 @@ export const replaceAreaInChallenge = (challenges, challengeId, newArea) => {
     });
 };
 export const getPolygonColor = (inside, status) => {
-console.log("getPolygonColor");
+    console.log("getPolygonColor");
     switch (true) {
-        case (inside!==false && status===0) :
+        case (inside !== false && status === 0) :
             return "rgba(0,0,0,0.5)";//black
         case (status === 1):
             return "rgba(255,0,0,0.5)";//red

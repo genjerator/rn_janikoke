@@ -10,6 +10,10 @@
         "image": "latest"
       }
     },
-    "production": {}
+    "production": {
+      "android": {
+        "buildType": "apk"
+      }
+    }
   }
 }

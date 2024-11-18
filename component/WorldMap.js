@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from "react";
 import {
     StyleSheet,
     View,
-    TouchableOpacity,
     Text,
     Dimensions,
     Vibration,
@@ -10,9 +9,8 @@ import {
 import * as Location from "expo-location";
 import MapView, {Marker, Polygon} from "react-native-maps";
 import {getPolygonColor, processPolygonFromChallenge, waitForChallengesData} from "./Polygons";
-import {fetchChallengesData, postInsidePolygon} from "../axios/ApiCalls";
+import {postInsidePolygon} from "../axios/ApiCalls";
 import {useUser} from "../context/UserContext";
-import {useChallenges} from "../context/ChallengesContext";
 
 
 const WorldMap = ({challenge}) => {
@@ -22,14 +20,12 @@ const WorldMap = ({challenge}) => {
     const [textx, setTextx] = useState("Loading...");
     const [countL, setCountL] = useState(0);
     const {user, loadUserData} = useUser();
-    const {setChallenges, getChallenges} = useChallenges();
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const locationSubscription = useRef(null); // Using useRef to persist subscription across renders
 
     useEffect(() => {
         loadUserData();
-        console.log(user, "user");
         var ok = true;
         const startWatchingLocation = async () => {
             let {status} = await Location.requestForegroundPermissionsAsync();
@@ -41,7 +37,7 @@ const WorldMap = ({challenge}) => {
             // Start watching the location and store the subscription in ref
             locationSubscription.current = await Location.watchPositionAsync(
                 {
-                    accuracy: Location.Accuracy.Highest,
+                    accuracy: Location.Accuracy.BestForNavigation,
                     timeInterval: 5000, // 5 seconds interval
                     distanceInterval: 0, // Update if the user moves by 1 meter
                 },
@@ -63,7 +59,7 @@ const WorldMap = ({challenge}) => {
                     });
                     const polygonsToRender = processPolygonFromChallenge(newLocation, challenge)
                     setPolygons(polygonsToRender);
-                    const insidePolygon = polygonsToRender.find(polygon => polygon.inside !== false );
+                    const insidePolygon = polygonsToRender.find(polygon => polygon.inside !== false);
                     console.log("polygonsToRender:", polygonsToRender);
                     console.log("insidePolygons:", insidePolygon);
                     if (insidePolygon && insidePolygon.inside !== false && insidePolygon.status === 0) {
@@ -79,7 +75,7 @@ const WorldMap = ({challenge}) => {
                                 if (result) {
                                     // Do something with the result
                                     console.log("Operation successful:", result);
-                                    processInside(insidePolygon,polygonsToRender);
+                                    processInside(insidePolygon, polygonsToRender);
                                     Vibration.vibrate(1000, false);
                                     challenge = data.map(item => {
                                         if (item.area_id === insidePolygon.inside) {

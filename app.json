@@ -14,12 +14,6 @@
             "usesCleartextTraffic": true
           }
         }
-      ],
-      [
-        "react-native-auth0",
-        {
-          "domain": "dev-usah3m5hn5jj5zf6.us.auth0.com"
-        }
       ]
     ],
     "name": "janikoke",

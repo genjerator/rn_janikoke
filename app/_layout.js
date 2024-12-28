@@ -2,7 +2,6 @@ import {Stack} from "expo-router";
 import {ChallengesProvider} from "../context/ChallengesContext";
 import {ResultsProvider} from "../context/ResultsContext";
 import {UserProvider} from "../context/UserContext";
-import {useAuth0, Auth0Provider} from 'react-native-auth0';
 
 const Layout = () => {
 

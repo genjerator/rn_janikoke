@@ -1,58 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, SafeAreaView, StyleSheet } from 'react-native';
-import { fetchResults } from "./axios/ApiCalls";
-import { useResults } from "./context/ResultsContext";
-import { useUser } from "./context/UserContext";
+import React, {useEffect, useState} from 'react';
+import {View, Text, FlatList, SafeAreaView, StyleSheet} from 'react-native';
+import {fetchTopList} from "./axios/ApiCalls";
+import {useResults} from "./context/ResultsContext";
+import {useUser} from "./context/UserContext";
 
-const Results = () => {
-    const { items, setResults } = useResults();
-    const { user } = useUser();
-    const [areaNamesPoints, setAreaNamesPoints] = useState([]);
+const Toplist = () => {
+    const {user} = useUser();
+    const [topList, setToplist] = useState([]);
     const [sum, setSum] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setResults([]);
-                const data = await fetchResults(user);
-                setResults(data);
-                console.log("results", items);
-                console.log("data", data);
+                const data = await fetchTopList(user);
+                setToplist(data);
             } catch (error) {
                 console.error('Error setting data:', error);
             }
         };
 
-        fetchData();
+        try {
+            fetchData();
+            console.log(topList);
+        } catch (error) {
+            console.error(error);
+        }
     }, []);
 
-    useEffect(() => {
-        console.log(items, "areaNamesAndPoints");
-        let total = 0;
-        const test = Object.keys(items).map(key => {
-            const challenge = items[key];
-            total += challenge.points;
-            return { area_name: challenge.area_name, points: challenge.points };
-        });
-        setSum(total);
-        setAreaNamesPoints(test);
-        console.log(areaNamesPoints, "areaNamesAndPoints");
-    }, [items]);
-
-    const renderItem = ({ item }) => (
+    const renderItem = ({item,key}) => (
         <View style={styles.itemContainer}>
-            <Text style={styles.areaName}>{item.area_name}</Text>
-            <Text style={styles.points}>Points: {item.points}</Text>
+            <Text style={styles.user}>{item.name}</Text>
+            <Text style={styles.points}>Points: {item.total}</Text>
         </View>
     );
+
+    const toplistRes = Object.entries(topList).map(([key, value]) => ({
+        name: key,
+        score: value.items,
+        total: value.total,
+    }));
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.totalScore}>Score total: {sum}</Text>
+                <Text style={styles.totalScore}>Top List</Text>
+            </View>
+            <View>
+                <Text style={styles.totalScore}>Top List</Text>
             </View>
             <FlatList
-                data={areaNamesPoints}
+                data={toplistRes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
                 contentContainerStyle={styles.listContainer}
@@ -74,7 +71,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.3,
         shadowRadius: 6,
         elevation: 5,
@@ -93,16 +90,17 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         borderRadius: 8,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
     },
-    areaName: {
+    user: {
         fontSize: 18,
         fontWeight: '600',
         color: '#333',
         marginBottom: 8,
+        textTransform: "capitalize"
     },
     points: {
         fontSize: 16,
@@ -110,4 +108,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Results;
+export default Toplist;

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import axios from 'axios';
-import {API_URL} from "../Constants";
-import {useChallenges} from "../context/ChallengesContext";
-import {useUser} from "../context/UserContext";
+import {API_URL} from "./axios/Constants";
+import {useUser} from "./context/UserContext";
 import {router} from "expo-router";
 
-const Login = ({ setToken }) => {
-    const { user, setUser,setSignedUser } = useUser();
+const Login = () => {
+    const { setSignedUser } = useUser();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -15,6 +14,7 @@ const Login = ({ setToken }) => {
         console.log("login button")
         try {
             const url =API_URL + '/login';
+            console.log(url);
             const response = await axios.post(url, {
                 email: email,
                 password: password

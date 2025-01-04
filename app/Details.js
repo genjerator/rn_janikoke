@@ -1,11 +1,11 @@
 // Detail.js
-import React, {useContext} from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
 import {useLocalSearchParams} from "expo-router";
-import Challenge from "../component/Challenge";
-import {useChallenges} from "../context/ChallengesContext";
+import Challenge from "./component/Challenge";
+import {useChallenges} from "./context/ChallengesContext";
 
-const Detail = ( {route}) => {
+const Detail = () => {
     const challengeId = useLocalSearchParams();
     const { items } = useChallenges();
 

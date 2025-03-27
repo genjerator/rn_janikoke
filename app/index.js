@@ -1,9 +1,9 @@
-import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, Button, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import Challenges from "../component/Challenges";
-import {fetchChallengesData} from "../axios/ApiCalls";
-import {useChallenges} from "../context/ChallengesContext";
-import {useUser} from "../context/UserContext";
+import Challenges from "./component/Challenges";
+import {fetchChallengesData} from "./axios/ApiCalls";
+import {useChallenges} from "./context/ChallengesContext";
+import {useUser} from "./context/UserContext";
 import {router} from "expo-router";
 
 const Home = () => {
@@ -14,7 +14,11 @@ const Home = () => {
     const handleResults = async () => {
         router.push({pathname: `Results`});
     };
+    const handleToplist = async () => {
+        router.push({pathname: `Toplist`});
+    };
     const handleLogin = async () => {
+        console.log("kjhkjhkj");
         router.push({pathname: `Login`});
     };
     const fetchData = async () => {
@@ -63,7 +67,7 @@ const Home = () => {
                         <View style={styles.buttonContainer}>
                             <Challenges></Challenges>
                         </View>
-                        {/* Results Button */}
+
                         <View style={styles.buttonContainer}>
                             <Button
                                 color="#6200EE"
@@ -71,8 +75,14 @@ const Home = () => {
                                 onPress={handleResults}
                             />
                         </View>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                color="#6200EE"
+                                title="Top List"
+                                onPress={handleToplist}
+                            />
+                        </View>
 
-                        {/* Logout Button */}
                         <View style={styles.buttonContainer}>
                             <Button
                                 color="#6200EE"
@@ -82,7 +92,10 @@ const Home = () => {
                         </View>
                     </View>
                 ) : <View style={styles.loggedOutContainer}>
-                    <Button color="#6200EE" title="Login" onPress={handleLogin}/>
+                    <Button color="#6200EE"
+                            title="Login"
+                            onPress={handleLogin}
+                    />
                 </View>}
 
             </View>

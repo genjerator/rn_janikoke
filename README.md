@@ -20,5 +20,7 @@ cd android && ./gradlew assembleRelease
 android/app/build/outputs/apk/release/app-release.apk
 
 
+eas build
+
 com.genjerator.janikoke.auth0://dev-usah3m5hn5jj5zf6.us.auth0.com/ios/com.genjerator.janikoke/callback
 com.genjerator.janikoke.auth0://dev-usah3m5hn5jj5zf6.us.auth0.com/android/com.genjerator.janikoke/callback

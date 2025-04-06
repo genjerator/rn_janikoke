@@ -19,6 +19,7 @@ const Home = () => {
     };
     const fetchData = async () => {
         try {
+            console.log("user",user)
             const data = await fetchChallengesData(user);
             setChallenges(data.data)
             setChallengeText("Choose a challenge: ")

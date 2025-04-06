@@ -1,6 +1,5 @@
 {
   "expo": {
-    "newArchEnabled": true,
     "scheme": "acme",
     "web": {
       "bundler": "metro"

@@ -61,7 +61,7 @@ const Login = () => {
                 secureTextEntry
             />
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
-            <Button title="Login1" onPress={handleLogin} />
+            <Button title="Login2" onPress={handleLogin} />
         </View>
     );
 };

@@ -1,2 +1,1 @@
-// export const API_URL = 'http://janikoke.top/api';
-export const API_URL = 'http://94.177.199.60/api';
+export const API_URL = 'http://188.213.173.121/api';
